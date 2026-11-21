@@ -1,14 +1,13 @@
 // ============================================================================
 // ARCHIVO: src/vistas/cliente/PantallaExito.jsx
-// DESCRIPCIÓN: Pantalla de éxito y confirmación de orden interactiva para Delicius Burguer.
+// DESCRIPCIÓN: Pantalla de éxito y confirmación de orden para Medusa Granizados.
 // ============================================================================
 
 import React, { useEffect, useState } from 'react';
-import { CheckCircle2, Clock, Hash, Package, ArrowRight, Store } from 'lucide-react';
+import { CheckCircle2, Clock, Hash, Package, ArrowRight, Sparkles } from 'lucide-react';
 
 export default function PantallaExito({ datosOrden, alVolverInicio }) {
   const numeroOrden = datosOrden?.numero_orden || datosOrden?.numeroOrden || '101';
-  
   const [segundosRestantes, setSegundosRestantes] = useState(15);
 
   useEffect(() => {
@@ -35,7 +34,7 @@ export default function PantallaExito({ datosOrden, alVolverInicio }) {
       try {
         const parsed = JSON.parse(rawItems);
         if (Array.isArray(parsed)) {
-          return parsed.map(i => `${i.cantidad || 1}x ${i.nombre || 'Producto'}`).join(', ');
+          return parsed.map((i) => `${i.cantidad || 1}x ${i.nombre || 'Producto'}`).join(', ');
         }
       } catch (e) {
         return rawItems;
@@ -44,82 +43,88 @@ export default function PantallaExito({ datosOrden, alVolverInicio }) {
     }
 
     if (Array.isArray(rawItems)) {
-      return rawItems.map(i => `${i.cantidad || 1}x ${i.nombre || 'Producto'}`).join(', ');
+      return rawItems.map((i) => `${i.cantidad || 1}x ${i.nombre || 'Producto'}`).join(', ');
     }
 
     return 'Detalles de items no disponibles';
   };
 
   const textoItemsFormateado = obtenerTextoItems();
+  const nombreCliente = datosOrden?.cliente || datosOrden?.cliente_nombre || 'Cliente';
+  const tipoServicio = datosOrden?.modo || datosOrden?.tipo_servicio || 'No especificado';
+  const metodoPago = datosOrden?.metodopago || datosOrden?.metodo_pago || 'Efectivo';
+  const totalPagado = Number(datosOrden?.total || 0);
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white flex flex-col items-center justify-center p-4 sm:p-6 select-none">
-      
-      <div className="max-w-lg w-full bg-neutral-900 border border-neutral-800 rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl relative overflow-hidden my-auto">
-        
-        <div className="absolute top-0 inset-x-0 h-1.5 bg-amber-500"></div>
+    <div className="min-h-screen bg-[#09090d] text-white flex flex-col items-center justify-center p-4 sm:p-6 select-none">
+      <div className="max-w-lg w-full bg-[#111018] border border-pink-500/20 rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl relative overflow-hidden my-auto">
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-pink-600 via-fuchsia-500 to-pink-500" />
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-bold text-amber-500 bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-500/20">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 text-xs font-bold text-pink-400 bg-pink-500/10 px-3 py-1.5 rounded-full border border-pink-500/30">
             <CheckCircle2 className="w-4 h-4" />
             <span>PEDIDO REGISTRADO</span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-neutral-400 text-xs bg-neutral-950 px-3 py-1.5 rounded-full border border-neutral-800">
-            <Clock className="w-3.5 h-3.5 text-amber-500" />
+          <div className="flex items-center gap-1.5 text-neutral-400 text-xs bg-[#09090d] px-3 py-1.5 rounded-full border border-neutral-800">
+            <Clock className="w-3.5 h-3.5 text-pink-400" />
             <span>Reinicia en {segundosRestantes}s</span>
           </div>
         </div>
 
         <div className="space-y-1 text-center">
           <h2 className="text-xl md:text-2xl font-black text-white">
-            ¡Gracias, {datosOrden?.cliente || datosOrden?.cliente_nombre || 'Cliente'}!
+            ¡Gracias, {nombreCliente}!
           </h2>
           <p className="text-neutral-400 text-xs leading-relaxed px-2">
-            Tu orden ha sido guardada con éxito en el sistema.
-            <span className="text-amber-400 font-semibold block mt-1">
-              "Lo bueno se hace esperar, y trataremos de hacerlo lo más rápido posible." 🍔🔥
+            Tu orden ha sido guardada con éxito en Medusa Granizados.
+            <span className="text-pink-400 font-semibold block mt-1">
+              "Cada granizado se prepara al momento con el sabor y la frescura de Medusa."
             </span>
           </p>
         </div>
 
-        <div className="bg-amber-500/15 border border-amber-500/30 rounded-2xl p-4 flex items-center gap-3 shadow-inner">
-          <div className="w-10 h-10 bg-amber-500 text-neutral-950 rounded-xl flex items-center justify-center shrink-0 font-bold shadow-md">
-            <Store className="w-5 h-5" />
+        <div className="bg-pink-500/10 border border-pink-500/30 rounded-2xl p-4 flex items-center gap-3">
+          <div className="w-10 h-10 bg-pink-600 text-white rounded-xl flex items-center justify-center shrink-0 font-bold shadow-md shadow-pink-600/25">
+            <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-xs font-black text-amber-400 uppercase tracking-wider">Estado de tu orden</h4>
+            <h4 className="text-xs font-black text-pink-400 uppercase tracking-wider">Estado de tu orden</h4>
             <p className="text-xs text-neutral-200 mt-0.5 leading-snug">
-              Tu pago fue procesado correctamente y el pedido ya se encuentra en preparación para cocina / despacho.
+              Tu pedido quedó registrado y ya pasó a preparación y despacho.
             </p>
           </div>
         </div>
 
-        <div className="bg-neutral-950 border border-neutral-800 rounded-2xl p-4 flex items-center justify-between">
+        <div className="bg-[#09090d] border border-neutral-800 rounded-2xl p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center text-amber-400 border border-neutral-800">
+            <div className="w-10 h-10 bg-[#15131f] rounded-xl flex items-center justify-center text-pink-400 border border-pink-500/20">
               <Hash className="w-5 h-5" />
             </div>
             <div className="text-left">
-              <span className="text-[10px] text-neutral-500 uppercase tracking-wider block font-semibold">Número de Orden</span>
+              <span className="text-[10px] text-neutral-500 uppercase tracking-wider block font-semibold">
+                Número de Orden
+              </span>
               <span className="text-xl font-black text-white">#{numeroOrden}</span>
             </div>
           </div>
 
           <div className="text-right">
-            <span className="text-[10px] text-neutral-500 uppercase tracking-wider block font-semibold">Tiempo Estimado</span>
-            <span className="text-sm font-bold text-amber-400">~15 min</span>
+            <span className="text-[10px] text-neutral-500 uppercase tracking-wider block font-semibold">
+              Tiempo Estimado
+            </span>
+            <span className="text-sm font-bold text-pink-400">~15 min</span>
           </div>
         </div>
 
-        <div className="bg-neutral-950 border border-neutral-800 rounded-2xl p-4 space-y-3">
+        <div className="bg-[#09090d] border border-neutral-800 rounded-2xl p-4 space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-neutral-300 border-b border-neutral-800 pb-2">
-            <Package className="w-4 h-4 text-amber-500" />
+            <Package className="w-4 h-4 text-pink-500" />
             <span>Resumen del Ticket</span>
           </div>
 
           <div className="py-1">
-            <p className="text-xs text-amber-300 font-medium leading-relaxed">
+            <p className="text-xs text-pink-300 font-medium leading-relaxed">
               {textoItemsFormateado}
             </p>
           </div>
@@ -127,38 +132,31 @@ export default function PantallaExito({ datosOrden, alVolverInicio }) {
           <div className="border-t border-neutral-800 pt-2 space-y-1 text-xs text-neutral-400">
             <div className="flex justify-between">
               <span>Tipo de servicio:</span>
-              <span className="text-white font-semibold capitalize">
-                {datosOrden?.modo || datosOrden?.tipo_servicio || 'No especificado'}
-              </span>
+              <span className="text-white font-semibold capitalize">{tipoServicio}</span>
             </div>
             <div className="flex justify-between">
               <span>Método de pago:</span>
-              <span className="text-white font-semibold capitalize">
-                {datosOrden?.metodopago || datosOrden?.metodo_pago || 'Efectivo'}
-              </span>
+              <span className="text-white font-semibold capitalize">{metodoPago}</span>
             </div>
             <div className="flex justify-between pt-2 border-t border-neutral-800/60 text-sm font-black">
               <span className="text-white">Total Pagado:</span>
-              <span className="text-amber-400">$ {(datosOrden?.total || 0).toLocaleString('es-CO')}</span>
+              <span className="text-pink-400">$ {totalPagado.toLocaleString('es-CO')}</span>
             </div>
           </div>
         </div>
 
         <button
           onClick={alVolverInicio}
-          className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-neutral-950 py-3.5 rounded-2xl font-black text-sm transition-all shadow-xl shadow-amber-500/20 cursor-pointer active:scale-95 touch-manipulation"
+          className="w-full flex items-center justify-center gap-2 bg-pink-600 hover:bg-pink-500 text-white py-3.5 rounded-2xl font-black text-sm transition-all shadow-xl shadow-pink-600/25 cursor-pointer active:scale-95 touch-manipulation"
         >
           <span>Hacer Nuevo Pedido Ahora</span>
           <ArrowRight className="w-4 h-4" />
         </button>
-
       </div>
 
-      {/* FOOTER / MARCA DE AGUA */}
       <footer className="text-center text-xs text-neutral-500 py-4 mt-auto">
-        Sistema Operado por <span className="font-semibold text-neutral-400">Vertizze</span> © 2026[cite: 16]
+        Sistema Operado por <span className="font-semibold text-neutral-400">Vértizze</span> © 2026
       </footer>
-
     </div>
   );
 }

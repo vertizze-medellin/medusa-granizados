@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle, ArrowRight, ChefHat, ShieldCheck } from 'lucide-react';
+import { AlertCircle, ArrowRight, ChefHat, ShieldCheck, UserRound } from 'lucide-react';
 import { supabase } from '../../sdk/supabaseClient';
 
 /** Acceso separado para administración y cocina. */
@@ -34,7 +34,10 @@ export default function Login({ alIniciarSesion }) {
       if (modulo === 'cocina' && !['cocina', 'administrador'].includes(rol)) {
         throw new Error('Este usuario no tiene permisos para acceder a cocina.');
       }
-      const rolFinal = modulo === 'cocina' && rol === 'administrador' ? 'cocina' : rol;
+      if (modulo === 'mesero' && !['mesero', 'administrador'].includes(rol)) {
+        throw new Error('Este usuario no tiene permisos para acceder a meseros.');
+      }
+      const rolFinal = modulo !== 'admin' && rol === 'administrador' ? modulo : rol;
       localStorage.setItem('vertizze_sesion', JSON.stringify({ ...data, rol: rolFinal }));
       localStorage.setItem('rol_vertizze', rolFinal);
       alIniciarSesion(rolFinal);
@@ -45,8 +48,9 @@ export default function Login({ alIniciarSesion }) {
     }
   };
 
-  const formulario = modo === 'admin' || modo === 'cocina';
+  const formulario = modo === 'admin' || modo === 'cocina' || modo === 'mesero';
   const esCocina = modo === 'cocina';
+  const esMesero = modo === 'mesero';
   return (
     <div className="min-h-screen bg-neutral-950 text-white flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-neutral-900 border border-neutral-800 rounded-3xl p-6 md:p-8 shadow-2xl">
@@ -65,10 +69,13 @@ export default function Login({ alIniciarSesion }) {
             <button onClick={() => setModo('cocina')} className="w-full bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 p-4 rounded-2xl flex items-center justify-between cursor-pointer">
               <span className="flex items-center gap-3"><ChefHat className="w-5 h-5 text-[#35E0FF]" /><span className="text-left"><strong className="block">Cocina (KDS)</strong><small className="text-neutral-400">Cola de pedidos en tiempo real</small></span></span><ArrowRight className="w-5 h-5 text-[#FF2E9A]" />
             </button>
+            <button onClick={() => setModo('mesero')} className="w-full bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 p-4 rounded-2xl flex items-center justify-between cursor-pointer">
+              <span className="flex items-center gap-3"><UserRound className="w-5 h-5 text-[#35E0FF]" /><span className="text-left"><strong className="block">Meseros</strong><small className="text-neutral-400">Pedidos listos para entregar</small></span></span><ArrowRight className="w-5 h-5 text-[#FF2E9A]" />
+            </button>
           </div>
         ) : (
           <form onSubmit={(event) => iniciarSesion(event, modo)} className="space-y-4">
-            <div className="flex items-center justify-between"><h2 className="text-sm font-bold uppercase tracking-wider text-[#35E0FF]">{esCocina ? 'Acceso a cocina (KDS)' : 'Acceso administrador'}</h2><button type="button" onClick={volver} className="text-xs text-neutral-400 underline cursor-pointer">Volver</button></div>
+            <div className="flex items-center justify-between"><h2 className="text-sm font-bold uppercase tracking-wider text-[#35E0FF]">{esCocina ? 'Acceso a cocina (KDS)' : esMesero ? 'Acceso de meseros' : 'Acceso administrador'}</h2><button type="button" onClick={volver} className="text-xs text-neutral-400 underline cursor-pointer">Volver</button></div>
             {error && <div className="bg-red-950/80 border border-red-500/40 text-red-200 p-3 rounded-xl text-xs flex items-center gap-2"><AlertCircle className="w-4 h-4 shrink-0" />{error}</div>}
             <label className="block text-xs font-bold text-neutral-300">Usuario<input required value={usuario} onChange={(event) => setUsuario(event.target.value)} className="mt-1 w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-2.5 text-sm text-white" /></label>
             <label className="block text-xs font-bold text-neutral-300">Contraseña / PIN<input required type="password" value={password} onChange={(event) => setPassword(event.target.value)} className="mt-1 w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-2.5 text-sm text-white" /></label>

@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+/* Identidad visual Medusa aplicada al panel administrativo. */
+.medusa-admin-theme [class*="bg-amber-"] { background-color: #FF2E9A !important; }
+.medusa-admin-theme [class*="hover:bg-amber-"]:hover { background-color: #ff58b3 !important; }
+.medusa-admin-theme [class*="text-amber-"] { color: #35E0FF !important; }
+.medusa-admin-theme [class*="border-amber-"] { border-color: #2F6BFF !important; }
+.medusa-admin-theme [class*="focus:border-amber-"]:focus { border-color: #FF2E9A !important; }
+.medusa-admin-theme [class*="shadow-amber-"] { --tw-shadow-color: rgba(255, 46, 154, 0.35) !important; }

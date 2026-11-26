@@ -1833,7 +1833,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white flex flex-col font-sans select-none">
+    <div className="medusa-admin-theme min-h-screen bg-neutral-950 text-white flex flex-col font-sans select-none">
       {cargandoInicial && (
         <div className="fixed inset-0 bg-neutral-950 z-50 flex flex-col items-center justify-center space-y-3">
           <div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>

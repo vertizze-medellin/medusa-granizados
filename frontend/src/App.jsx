@@ -10,6 +10,7 @@ import DashboardGeneral from './vistas/admin/DashboardGeneral';
 
 // Vista de Cocina / KDS (Tiempo Real)
 import PantallaCocina from './vistas/cocina/PantallaCocina';
+import PantallaMesero from './vistas/mesero/PantallaMesero';
 
 // Vistas del Cliente (Públicas - Web de Pedidos)
 import PantallaInicio from './vistas/cliente/PantallaInicio';
@@ -27,7 +28,7 @@ export default function App() {
   const [datosUltimaOrden, setDatosUltimaOrden] = useState(null);
 
   const [sesionActiva, setSesionActiva] = useState(false);
-  const [rolSesion, setRolSesion] = useState(null); // 'administrador', 'cocina', 'colaborador'
+  const [rolSesion, setRolSesion] = useState(null); // 'administrador', 'cocina', 'mesero', 'colaborador'
 
   useEffect(() => {
     const actualizarRuta = () => setRutaActual(window.location.pathname);
@@ -108,7 +109,7 @@ export default function App() {
   // ==========================================================================
   const ruta = window.location.pathname.toLowerCase();
 
-  if (ruta.includes('/admin') || ruta.includes('/cocina') || ruta.includes('/login')) {
+  if (ruta.includes('/admin') || ruta.includes('/cocina') || ruta.includes('/mesero') || ruta.includes('/login')) {
     
     // Si no hay sesión activa, mostramos el Login
     if (!sesionActiva) {
@@ -138,6 +139,18 @@ export default function App() {
             </button>
           </div>
           <PantallaCocina />
+        </div>
+      );
+    }
+
+    if (rolSesion === 'mesero') {
+      return (
+        <div className="min-h-screen bg-[#07070F] text-white flex flex-col select-none">
+          <div className="bg-[#0B1220] border-b border-[#2F6BFF]/30 px-6 py-3 flex justify-between items-center text-xs">
+            <span className="text-[#35E0FF] font-bold flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-[#FF2E9A] animate-pulse"></span>Meseros — Medusa Granizados</span>
+            <button onClick={cerrarSesionGeneral} className="text-[#FF2E9A] hover:text-white font-bold cursor-pointer">Cerrar Sesión</button>
+          </div>
+          <PantallaMesero />
         </div>
       );
     }

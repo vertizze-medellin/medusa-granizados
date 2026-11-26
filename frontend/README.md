@@ -1,5 +1,25 @@
 # React + Vite
 
+## Ejecutar Medusa en local
+
+Desde esta carpeta, instala las dependencias y arranca Vite:
+
+```powershell
+npm install
+npm run dev
+```
+
+Antes de iniciar, copia `.env.example` como `.env.local` y completa las variables de Supabase:
+
+```env
+VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
+VITE_SUPABASE_ANON_KEY=tu-clave-anon-publica
+```
+
+## Desplegar en Vercel
+
+Configura `frontend` como **Root Directory**, usa `npm run build` como comando de compilación y `dist` como directorio de salida. En **Settings → Environment Variables**, agrega `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` para los entornos que quieras desplegar.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

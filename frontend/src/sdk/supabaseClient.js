@@ -1,15 +1,10 @@
-// ============================================================================
-// ARCHIVO: src/sdk/supabaseClient.js
-// DESCRIPCIÓN: Cliente de Supabase conectado correctamente para Medusa Granizados.
-// ============================================================================
-
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
 
-// URL base limpia (sin /rest/v1/)
-const urlFinal = supabaseUrl || "https://frqeuftidngtqyvzrpjl.supabase.co";
-const keyFinal = supabaseAnonKey || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZycWV1ZnRpZG5ndHF5dnpycGpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUwMTQ5MzQsImV4cCI6MjExMDU5MDkzNH0.WTonsg_LnC8puENdP0xB2UyeU7OmAytJqFmJw0AYYTE";
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Faltan VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY. Configúralas en frontend/.env.local o en Vercel.');
+}
 
-export const supabase = createClient(urlFinal, keyFinal);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);

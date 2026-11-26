@@ -9,7 +9,7 @@ import Login from './vistas/admin/Login';
 import DashboardGeneral from './vistas/admin/DashboardGeneral';
 
 // Vista de Cocina / KDS (Tiempo Real)
-import PantallaPedidos from './vistas/pedidos/PantallaPedidos';
+import PantallaCocina from './vistas/cocina/PantallaCocina';
 
 // Vistas del Cliente (Públicas - Web de Pedidos)
 import PantallaInicio from './vistas/cliente/PantallaInicio';
@@ -137,7 +137,7 @@ export default function App() {
               Cerrar Sesión
             </button>
           </div>
-          <PantallaPedidos />
+          <PantallaCocina />
         </div>
       );
     }

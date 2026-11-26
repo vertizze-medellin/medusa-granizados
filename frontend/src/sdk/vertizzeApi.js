@@ -3,13 +3,10 @@
 // DESCRIPCIÓN: SDK de conexión a Supabase optimizado para Medusa Granizados.
 // ============================================================================
 
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from './supabaseClient'
 
 // URL limpia sin /rest/v1/
-const SUPABASE_URL = 'https://frqeuftidngtqyvzrpjl.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZycWV1ZnRpZG5ndHF5dnpycGpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUwMTQ5MzQsImV4cCI6MjExMDU5MDkzNH0.WTonsg_LnC8puENdP0xB2UyeU7OmAytJqFmJw0AYYTE'
-
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+export { supabase }
 
 // Catálogo Oficial de Medusa Granizados con precios y toppings exactos
 const MENU_MEDUSA_OFICIAL = [

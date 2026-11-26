@@ -173,7 +173,7 @@ export default function PantallaCocina() {
     const formatoTiempo = minutos > 0 ? `${minutos} min ${segundos} seg` : `${segundos} seg`;
 
     return (
-      <div className="flex items-center gap-1.5 bg-black/60 border border-amber-500/40 px-2.5 py-1 rounded-lg text-amber-300 font-mono text-xs font-bold">
+      <div className="flex items-center gap-1.5 bg-black/60 border border-[#FF2E9A]/40 px-2.5 py-1 rounded-lg text-[#FF2E9A] font-mono text-xs font-bold">
         <Clock className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '4s' }} />
         <span>⏱️ {formatoTiempo}</span>
       </div>
@@ -188,7 +188,7 @@ export default function PantallaCocina() {
       try {
         itemsParsed = JSON.parse(itemsRaw);
       } catch (e) {
-        return <p className="text-sm font-semibold text-amber-100">{itemsRaw}</p>;
+        return <p className="text-sm font-semibold text-cyan-100">{itemsRaw}</p>;
       }
     }
 
@@ -206,7 +206,7 @@ export default function PantallaCocina() {
                   <span>{cantidad}x {nombre}</span>
                 </div>
                 {observacion && (
-                  <p className="text-xs text-amber-300 font-bold italic mt-0.5 bg-black/30 px-2 py-0.5 rounded-md inline-block">
+                  <p className="text-xs text-[#FF2E9A] font-bold italic mt-0.5 bg-black/30 px-2 py-0.5 rounded-md inline-block">
                     Nota: {observacion}
                   </p>
                 )}
@@ -217,7 +217,7 @@ export default function PantallaCocina() {
       );
     }
 
-    return <p className="text-sm font-semibold text-amber-100">{JSON.stringify(itemsParsed)}</p>;
+    return <p className="text-sm font-semibold text-cyan-100">{JSON.stringify(itemsParsed)}</p>;
   };
 
   return (
@@ -227,12 +227,12 @@ export default function PantallaCocina() {
         {/* ENCABEZADO RESPONSIVO */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-amber-500/10 border border-amber-500/30 rounded-xl flex items-center justify-center text-amber-400 shrink-0">
+            <div className="w-10 h-10 bg-[#2F6BFF]/15 border border-[#2F6BFF]/40 rounded-xl flex items-center justify-center text-[#35E0FF] shrink-0">
               <ChefHat className="w-5 h-5" />
             </div>
             <div>
               <h1 className="text-lg sm:text-xl font-black tracking-tight text-white uppercase">
-                DELICIUS <span className="text-amber-500">BURGUES</span> - COCINA (KDS)
+                MEDUSA <span className="text-[#FF2E9A]">GRANIZADOS</span> - COCINA (KDS)
               </h1>
               <p className="text-xs text-neutral-400">Toca la tarjeta para avanzar el estado del pedido en tiempo real.</p>
             </div>
@@ -242,14 +242,14 @@ export default function PantallaCocina() {
             <button 
               onClick={reproducirAlertaSonora}
               title="Probar sonido de alerta"
-              className="bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 px-3 py-2 rounded-xl text-xs font-semibold text-amber-400 flex items-center gap-1.5 cursor-pointer transition-all shadow-inner touch-manipulation"
+              className="bg-[#0B1220] hover:bg-[#2F6BFF]/20 border border-[#2F6BFF]/30 px-3 py-2 rounded-xl text-xs font-semibold text-[#35E0FF] flex items-center gap-1.5 cursor-pointer transition-all shadow-inner touch-manipulation"
             >
               <Bell className="w-3.5 h-3.5 animate-bounce" />
               <span>Probar Sonido</span>
             </button>
 
-            <div className="flex items-center gap-2 bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-xl text-xs font-semibold text-amber-400 shadow-inner">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <div className="flex items-center gap-2 bg-[#0B1220] border border-[#2F6BFF]/30 px-3 py-2 rounded-xl text-xs font-semibold text-[#35E0FF] shadow-inner">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FF2E9A] animate-pulse"></span>
               <span>Sistema en Línea</span>
             </div>
           </div>
@@ -278,10 +278,10 @@ export default function PantallaCocina() {
               let estiloBotonAccion = "bg-neutral-800 hover:bg-neutral-700 text-white border border-white/20";
 
               if (estadoActual === 'en_proceso' || estadoActual === 'en proceso') {
-                estilosTarjeta = "border-amber-500 bg-amber-950/95 text-amber-50 shadow-xl shadow-amber-950/40 hover:border-amber-400";
-                franjaColor = "bg-amber-400";
+                estilosTarjeta = "border-[#FF2E9A] bg-[#28091d] text-pink-50 shadow-xl shadow-pink-950/40 hover:border-[#FF2E9A]";
+                franjaColor = "bg-[#FF2E9A]";
                 textoBotonAccion = "Marcar como Listo";
-                estiloBotonAccion = "bg-amber-500 hover:bg-amber-400 text-neutral-950 font-black shadow-lg";
+                estiloBotonAccion = "bg-[#FF2E9A] hover:bg-[#FF2E9A]/80 text-white font-black shadow-lg";
               }
 
               return (
@@ -294,7 +294,7 @@ export default function PantallaCocina() {
 
                   <div className="space-y-2.5 pt-1">
                     <div className="flex items-center justify-between flex-wrap gap-2">
-                      <span className="text-xs font-black bg-black/50 px-2.5 py-1 rounded-lg border border-white/10 text-amber-300">
+                      <span className="text-xs font-black bg-black/50 px-2.5 py-1 rounded-lg border border-white/10 text-[#35E0FF]">
                         #{orden.numero_orden || orden.id}
                       </span>
                       
@@ -304,7 +304,7 @@ export default function PantallaCocina() {
                         )}
 
                         {numeroMesa && (
-                          <span className="text-[11px] font-black bg-amber-500 text-neutral-950 px-2.5 py-1 rounded-lg shadow-sm flex items-center gap-1">
+                          <span className="text-[11px] font-black bg-[#2F6BFF] text-white px-2.5 py-1 rounded-lg shadow-sm flex items-center gap-1">
                             <UtensilsCrossed className="w-3 h-3" />
                             Mesa {numeroMesa}
                           </span>

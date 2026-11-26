@@ -105,6 +105,16 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
     return str.split(' ').map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()).join(' ');
   };
 
+  const formatearFechaHora = (fecha) => {
+    if (!fecha) return '';
+    const valor = new Date(fecha);
+    if (Number.isNaN(valor.getTime())) return '';
+    return valor.toLocaleString('es-CO', {
+      dateStyle: 'short',
+      timeStyle: 'short'
+    });
+  };
+
   const limpiarTelefono = (tel) => {
     if (!tel) return 'N/A';
     let limpio = String(tel).trim();
@@ -1516,9 +1526,16 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                             </td>
                             <td className="py-2.5">
                               {estaBloqueado ? (
-                                <span className={`px-2 py-1 rounded-lg text-[11px] font-bold inline-block ${estadoPedidoRaw === 'listo' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}>
-                                  {capitalizarTexto(o.estado)}
-                                </span>
+                                <div className="space-y-1">
+                                  <span className={`px-2 py-1 rounded-lg text-[11px] font-bold inline-block ${estadoPedidoRaw === 'listo' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}>
+                                    {capitalizarTexto(o.estado)}
+                                  </span>
+                                  {estadoPedidoRaw === 'entregado' && o.tiempo_entrega && (
+                                    <span className="block text-[10px] text-neutral-400">
+                                      Entregado: {formatearFechaHora(o.tiempo_entrega)}
+                                    </span>
+                                  )}
+                                </div>
                               ) : (
                                 <select 
                                   value={o.estado || 'Pendiente'}

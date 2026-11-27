@@ -222,6 +222,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
       setCargandoMenu(false);
       setCargandoUsuarios(false);
     }, 5000);
+    const respaldoActualizacion = setInterval(cargarDatosBD, 10000);
 
     const canalRealtime = supabase
       .channel('cambios-vertizze-db')
@@ -260,6 +261,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
 
     return () => {
       clearTimeout(timerSeguridad);
+      clearInterval(respaldoActualizacion);
       supabase.removeChannel(canalRealtime);
     };
   }, []);

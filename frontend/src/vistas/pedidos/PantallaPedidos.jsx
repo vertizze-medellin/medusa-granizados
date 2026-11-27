@@ -63,8 +63,10 @@ export default function PantallaCocina() {
         }
       )
       .subscribe();
+    const respaldoActualizacion = setInterval(obtenerOrdenes, 10000);
 
     return () => {
+      clearInterval(respaldoActualizacion);
       supabase.removeChannel(channel);
     };
   }, []);

@@ -48,12 +48,14 @@ export default function PantallaMesero() {
   useEffect(() => {
     cargarOrdenes();
     const timer = setInterval(() => setActualizadoHace(Date.now()), 1000);
+    const respaldoActualizacion = setInterval(cargarOrdenes, 10000);
     const canal = supabase
       .channel(`ordenes-mesero-${Date.now()}`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'ordenes' }, cargarOrdenes)
       .subscribe();
     return () => {
       clearInterval(timer);
+      clearInterval(respaldoActualizacion);
       supabase.removeChannel(canal);
     };
   }, []);

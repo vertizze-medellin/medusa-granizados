@@ -268,7 +268,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
       )
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'usuarios' },
+        { event: '*', schema: 'public', table: 'usuarios_admin' },
         () => { cargarDatosBD(); }
       )
       .subscribe();
@@ -288,7 +288,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
         supabase.from('ordenes').select('*').order('id', { ascending: false }),
         supabase.from('clientes').select('*').order('creado_en', { ascending: false }),
         supabase.from('cobertura_zonas').select('*').order('id', { ascending: true }),
-        supabase.from('usuarios').select('*').order('id', { ascending: true })
+        supabase.from('usuarios_admin').select('*').order('id', { ascending: true })
       ]);
 
       setProductos(resProductos.data || []);
@@ -343,34 +343,35 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
 
   const guardarUsuario = async (e) => {
     e.preventDefault();
-    if (!formNombreUsuario.trim() || !formCorreoUsuario.trim()) {
+    if (!formNombreUsuario.trim() || (!formCorreoUsuario.trim() && !formClaveUsuario.trim())) {
       alert('El nombre y el correo son obligatorios.');
       return;
     }
 
     const payload = {
       nombre: capitalizarTexto(formNombreUsuario),
-      correo: formCorreoUsuario.trim().toLowerCase(),
+      usuario: (formCorreoUsuario.trim() || formNombreUsuario.trim()).toLowerCase().replace(/\s+/g, '.'),
+      correo: formCorreoUsuario.trim().toLowerCase() || null,
       telefono: limpiarTelefono(formTelefonoUsuario) === 'N/A' ? null : limpiarTelefono(formTelefonoUsuario),
       rol: formRolUsuario,
       activo: Boolean(formActivoUsuario)
     };
 
     if (formClaveUsuario.trim() !== '') {
-      payload.clave_acceso = formClaveUsuario.trim();
+      payload.password = formClaveUsuario.trim();
     }
 
     try {
       if (modoEdicionUsuario && usuarioActualId) {
         const { error } = await supabase
-          .from('usuarios')
+          .from('usuarios_admin')
           .update(payload)
           .eq('id', usuarioActualId);
 
         if (error) throw error;
       } else {
         const { error } = await supabase
-          .from('usuarios')
+          .from('usuarios_admin')
           .insert([payload]);
 
         if (error) throw error;
@@ -388,7 +389,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
     const nuevoEstado = !(usr.activo !== false);
     try {
       const { error } = await supabase
-        .from('usuarios')
+        .from('usuarios_admin')
         .update({ activo: nuevoEstado })
         .eq('id', usr.id);
 
@@ -403,7 +404,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
   const eliminarUsuario = async (id) => {
     if (window.confirm('¿Estás seguro de eliminar este usuario y revocar su acceso?')) {
       try {
-        const { error } = await supabase.from('usuarios').delete().eq('id', id);
+        const { error } = await supabase.from('usuarios_admin').delete().eq('id', id);
         if (error) throw error;
         await cargarDatosBD();
       } catch (error) {
@@ -2038,6 +2039,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
     </div>
   );
 }
+
 
 
 

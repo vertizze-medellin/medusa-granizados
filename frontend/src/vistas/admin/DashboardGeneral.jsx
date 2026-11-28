@@ -3,7 +3,7 @@
 // DESCRIPCIÓN: Panel con Control de pagos, Clientes, Órdenes, Productos y Usuarios.
 // ============================================================================
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Menu, X, ClipboardList, Utensils, LogOut, Store, ExternalLink,
   Plus, Calendar, Edit3, Trash2, Image as ImageIcon, CheckCircle, Printer, CreditCard, Search, Users, Phone, MapPin, ChevronLeft, ChevronRight, Key, ShieldCheck, Lock
@@ -87,6 +87,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
 
   // Estado para ticket de impresión
   const [ordenImprimiendo, setOrdenImprimiendo] = useState(null);
+  const cargaDatosEnCurso = useRef(false);
 
   const obtenerItemsMenu = () => {
     return [
@@ -281,8 +282,10 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
   }, []);
 
   const cargarDatosBD = async () => {
+    if (cargaDatosEnCurso.current) return;
+    cargaDatosEnCurso.current = true;
     try {
-      const [resProductos, resCategorias, resOrdenes, resClientes, resZonas, resUsuarios] = await Promise.all([
+      let [resProductos, resCategorias, resOrdenes, resClientes, resZonas, resUsuarios] = await Promise.all([
         supabase.from('productos').select('*').order('id', { ascending: true }),
         supabase.from('categorias').select('*').order('id', { ascending: true }),
         supabase.from('ordenes').select('*').order('id', { ascending: false }),
@@ -291,16 +294,26 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
         supabase.from('usuarios_admin').select('*').order('id', { ascending: true })
       ]);
 
-      setProductos(resProductos.data || []);
-      setCategorias(resCategorias.data || []);
-      setOrdenes(resOrdenes.data || []);
+      // Algunas instalaciones antiguas no tienen creado_en; conservamos los datos y reintentamos sin ordenar.
+      if (resClientes.error) {
+        const clientesSinOrden = await supabase.from('clientes').select('*');
+        if (!clientesSinOrden.error) resClientes = clientesSinOrden;
+      }
+
+      if (!resProductos.error) setProductos(resProductos.data || []);
+      if (!resCategorias.error) setCategorias(resCategorias.data || []);
+      if (!resOrdenes.error) setOrdenes(resOrdenes.data || []);
       // Repara clientes que pudieron quedar pendientes si Realtime estaba desactivado.
-      if (resOrdenes.data?.length) await sincronizarClientesDesdeOrdenes(resOrdenes.data);
-      setClientes(resClientes.data || []);
-      setCoberturaZonas(resZonas.data || []);
+      if (!resOrdenes.error && resOrdenes.data?.length) await sincronizarClientesDesdeOrdenes(resOrdenes.data);
+      if (!resClientes.error) setClientes(resClientes.data || []);
+      if (!resZonas.error) setCoberturaZonas(resZonas.data || []);
       if (!resUsuarios.error) {
         setUsuarios(resUsuarios.data || []);
       }
+
+      [resProductos, resCategorias, resOrdenes, resClientes, resZonas, resUsuarios]
+        .filter((respuesta) => respuesta.error)
+        .forEach((respuesta) => console.error('Error cargando datos del dashboard:', respuesta.error.message));
 
       if (resCategorias.data && resCategorias.data.length > 0) {
         setFormCategoriaId(String(resCategorias.data[0].id));
@@ -308,6 +321,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
     } catch (error) {
       console.error("Error general al cargar datos de la BD:", error.message);
     } finally {
+      cargaDatosEnCurso.current = false;
       setCargandoMenu(false);
       setCargandoOrdenes(false);
       setCargandoClientes(false);

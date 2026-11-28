@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { CupSoda, ShoppingBag, Zap } from 'lucide-react';
+import logoMedusa from '../../../Logo medusa.jpeg';
 
 export default function PantallaInicio({ alSeleccionarModo }) {
   return (
@@ -24,8 +25,8 @@ export default function PantallaInicio({ alSeleccionarModo }) {
       <main className="flex flex-col items-center justify-center text-center space-y-4 sm:space-y-6 w-full max-w-4xl mx-auto my-auto px-2">
         
         {/* Logo / Espacio visual */}
-        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-[#0B1220] border-2 border-[#2F6BFF] flex items-center justify-center text-slate-400 text-xs text-center p-2 shadow-[0_0_15px_rgba(47,107,255,0.3)] shrink-0">
-          <span>[ Logo Medusa ]</span>
+        <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-3xl bg-[#0B1220] border-2 border-[#2F6BFF] flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(47,107,255,0.3)] shrink-0">
+          <img src={logoMedusa} alt="Logo Medusa Granizados" className="w-full h-full object-contain p-2" />
         </div>
 
         <div className="space-y-2 max-w-lg px-2">

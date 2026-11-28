@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { obtenerMenu } from '../../sdk/vertizzeApi';
+import logoMedusa from '../../../Logo medusa.jpeg';
 import { 
   CupSoda, 
   ShoppingBag, 
@@ -296,9 +297,12 @@ export default function PantallaMenu({ modoPedido, alVolverInicio, alIrAlCarrito
           </button>
 
           <div className="text-center">
-            <h1 className="text-lg sm:text-xl font-black tracking-wider text-white uppercase drop-shadow-[0_0_10px_rgba(47,107,255,0.5)]">
-              MEDUSA <span className="text-[#FF2E9A]">GRANIZADOS</span>
-            </h1>
+            <div className="flex items-center gap-2">
+              <img src={logoMedusa} alt="Logo Medusa Granizados" className="w-10 h-10 object-contain rounded-lg" />
+              <h1 className="text-lg sm:text-xl font-black tracking-wider text-white uppercase drop-shadow-[0_0_10px_rgba(47,107,255,0.5)]">
+                MEDUSA <span className="text-[#FF2E9A]">GRANIZADOS</span>
+              </h1>
+            </div>
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2 bg-[#2F6BFF]/15 border border-[#2F6BFF]/40 px-3 py-1.5 rounded-xl text-[#35E0FF] text-xs font-bold">

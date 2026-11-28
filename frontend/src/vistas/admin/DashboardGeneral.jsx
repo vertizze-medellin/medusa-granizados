@@ -1379,11 +1379,13 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
           const estadoActual = o.estado ? o.estado.toLowerCase().trim() : 'pendiente';
           const matchEstado = filtroEstadoOrden === 'todos' || estadoActual === filtroEstadoOrden.toLowerCase();
 
-          const fechaCreacion = o.creado_en ? o.creado_en.split('T')[0] : '';
+          const fechaOriginal = o.creado_en || o.created_at || o.fecha_creacion || o.fecha;
+          const fechaCreacion = fechaOriginal ? String(fechaOriginal).split('T')[0] : '';
           const matchFechaInicio = !filtroFechaInicioOrden || fechaCreacion >= filtroFechaInicioOrden;
           const matchFechaFin = !filtroFechaFinOrden || fechaCreacion <= filtroFechaFinOrden;
 
-          return matchBusqueda && matchEstado && matchFechaInicio && matchFechaFin;
+          const rangoValido = !filtroFechaInicioOrden || !filtroFechaFinOrden || filtroFechaInicioOrden <= filtroFechaFinOrden;
+          return rangoValido && matchBusqueda && matchEstado && matchFechaInicio && matchFechaFin;
         });
 
         const totalRegistros = ordenesFiltradas.length;
@@ -1392,6 +1394,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
         const indicePrimerRegistro = indiceUltimoRegistro - registrosPorPagina;
         const ordenesPaginadas = ordenesFiltradas.slice(indicePrimerRegistro, indiceUltimoRegistro);
 
+        const rangoFechaInvalido = filtroFechaInicioOrden && filtroFechaFinOrden && filtroFechaInicioOrden > filtroFechaFinOrden;
         const cambiarPagina = (nuevaPagina) => {
           if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) setPaginaActualOrdenes(nuevaPagina);
         };
@@ -1430,6 +1433,14 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
           }
           return subtotalBase;
         };
+
+        const pagosPorMetodo = ordenesFiltradas.reduce((totales, orden) => {
+          if (!String(orden.estado_pago || '').toLowerCase().includes('pagado')) return totales;
+          const metodo = String(orden.metodo_pago || 'Efectivo').toLowerCase();
+          const clave = metodo.includes('transfer') ? 'transferencia' : 'efectivo';
+          totales[clave] += calcularTotalConDomicilio(orden);
+          return totales;
+        }, { efectivo: 0, transferencia: 0 });
 
         return (
           <div className="space-y-3 max-w-full overflow-hidden">
@@ -1484,6 +1495,25 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                   {f.label}
                 </button>
               ))}
+            </div>
+
+            {rangoFechaInvalido && (
+              <div className="bg-red-950/60 border border-red-500/40 text-red-200 rounded-xl px-3 py-2 text-xs font-bold">
+                La fecha inicial no puede ser posterior a la fecha final.
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="bg-emerald-950/40 border border-emerald-500/30 rounded-xl px-4 py-3">
+                <p className="text-[10px] uppercase tracking-wider text-emerald-300 font-bold">Pagos en efectivo</p>
+                <p className="text-xl font-black text-emerald-200">$ {pagosPorMetodo.efectivo.toLocaleString('es-CO')}</p>
+                <p className="text-[10px] text-emerald-400/70">Solo órdenes marcadas como pagadas</p>
+              </div>
+              <div className="bg-blue-950/40 border border-blue-500/30 rounded-xl px-4 py-3">
+                <p className="text-[10px] uppercase tracking-wider text-blue-300 font-bold">Pagos por transferencia</p>
+                <p className="text-xl font-black text-blue-200">$ {pagosPorMetodo.transferencia.toLocaleString('es-CO')}</p>
+                <p className="text-[10px] text-blue-400/70">Solo órdenes marcadas como pagadas</p>
+              </div>
             </div>
 
             {cargandoOrdenes ? (

@@ -116,6 +116,19 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
     });
   };
 
+  const fechaEnMedellin = (fecha) => {
+    if (!fecha) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(String(fecha))) return String(fecha);
+    const valor = new Date(fecha);
+    if (Number.isNaN(valor.getTime())) return '';
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Bogota',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(valor);
+  };
+
   const limpiarTelefono = (tel) => {
     if (!tel) return 'N/A';
     let limpio = String(tel).trim();
@@ -1380,7 +1393,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
           const matchEstado = filtroEstadoOrden === 'todos' || estadoActual === filtroEstadoOrden.toLowerCase();
 
           const fechaOriginal = o.creado_en || o.created_at || o.fecha_creacion || o.fecha;
-          const fechaCreacion = fechaOriginal ? String(fechaOriginal).split('T')[0] : '';
+          const fechaCreacion = fechaOriginal ? fechaEnMedellin(fechaOriginal) : '';
           const matchFechaInicio = !filtroFechaInicioOrden || fechaCreacion >= filtroFechaInicioOrden;
           const matchFechaFin = !filtroFechaFinOrden || fechaCreacion <= filtroFechaFinOrden;
 
@@ -1405,7 +1418,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
         );
 
         const filtrarHoy = () => {
-          const hoyStr = new Date().toISOString().split('T')[0];
+          const hoyStr = fechaEnMedellin(new Date());
           setFiltroFechaInicioOrden(hoyStr);
           setFiltroFechaFinOrden(hoyStr);
           setPaginaActualOrdenes(1);

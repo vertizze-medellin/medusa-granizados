@@ -1,6 +1,6 @@
 ﻿// ============================================================================
 // ARCHIVO: src/vistas/admin/DashboardGeneral.jsx
-// DESCRIPCIÃ“N: Panel con Control de pagos, Clientes, Ã“rdenes, Productos y Usuarios.
+// DESCRIPCIÓN: Panel con Control de pagos, Clientes, Órdenes, Productos y Usuarios.
 // ============================================================================
 
 import React, { useState, useEffect } from 'react';
@@ -21,7 +21,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
 
   const [cargandoInicial, setCargandoInicial] = useState(true);
 
-  // Estados de Ã“rdenes
+  // Estados de Órdenes
   const [ordenes, setOrdenes] = useState([]);
   const [cargandoOrdenes, setCargandoOrdenes] = useState(true);
   const [busquedaOrden, setBusquedaOrden] = useState('');
@@ -51,7 +51,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
   const [formDireccionCliente, setFormDireccionCliente] = useState('');
   const [formObsCliente, setFormObsCliente] = useState('');
 
-  // Estados de Productos (MenÃº)
+  // Estados de Productos (Menú)
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [cargandoMenu, setCargandoMenu] = useState(true);
@@ -85,14 +85,14 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
   // Estados de Cobertura y Zonas
   const [coberturaZonas, setCoberturaZonas] = useState([]);
 
-  // Estado para ticket de impresiÃ³n
+  // Estado para ticket de impresión
   const [ordenImprimiendo, setOrdenImprimiendo] = useState(null);
 
   const obtenerItemsMenu = () => {
     return [
       { id: 'pagos', label: 'Control de pagos', icon: CreditCard },
-      { id: 'clientes', label: 'GestiÃ³n de clientes', icon: Users },
-      { id: 'ordenes', label: 'GestiÃ³n de Ã³rdenes', icon: ClipboardList },
+      { id: 'clientes', label: 'Gestión de clientes', icon: Users },
+      { id: 'ordenes', label: 'Gestión de órdenes', icon: ClipboardList },
       { id: 'productos', label: 'Productos', icon: Utensils },
       { id: 'usuarios', label: 'Usuarios y acceso', icon: ShieldCheck },
       { id: 'meseros', label: 'Meseros (CRUD)', icon: Users }
@@ -153,7 +153,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
       return items.map(item => {
         const cantidad = item.cantidad || item.stock || 1;
         const nombre = item.nombre || item.producto || item.descripcion || '';
-        const nombreCapitalizado = capitalizarTexto(nombre) || 'ArtÃ­culo';
+        const nombreCapitalizado = capitalizarTexto(nombre) || 'Artículo';
         const precioItem = item.precio ? ` ($ ${Number(item.precio).toLocaleString()})` : '';
         let texto = `â€¢ ${cantidad}x ${nombreCapitalizado}${precioItem}`;
         if (item.observacion) {
@@ -185,7 +185,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
               telefono: telOrd,
               nombre: capitalizarTexto(nomOrd),
               direccion: dirFormateada,
-              observaciones: ord.observaciones || 'Registrado automÃ¡ticamente desde Ã“rdenes'
+              observaciones: ord.observaciones || 'Registrado automáticamente desde Órdenes'
             }]);
           } else {
             await supabase.from('clientes')
@@ -303,7 +303,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
     }
   };
 
-  // --- FUNCIONES MÃ“DULO USUARIOS (CONTROL DE ACCESO) ---
+  // --- FUNCIONES MÓDULO USUARIOS (CONTROL DE ACCESO) ---
   const abrirModalCrearUsuario = () => {
     setModoEdicionUsuario(false);
     setUsuarioActualId(null);
@@ -388,7 +388,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
   };
 
   const eliminarUsuario = async (id) => {
-    if (window.confirm('Â¿EstÃ¡s seguro de eliminar este usuario y revocar su acceso?')) {
+    if (window.confirm('¿Estás seguro de eliminar este usuario y revocar su acceso?')) {
       try {
         const { error } = await supabase.from('usuarios').delete().eq('id', id);
         if (error) throw error;
@@ -400,7 +400,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
     }
   };
 
-  // --- FUNCIONES MÃ“DULO CLIENTES ---
+  // --- FUNCIONES MÓDULO CLIENTES ---
   const abrirModalCrearCliente = () => {
     setModoEdicionCliente(false);
     setFormTelefonoCliente('');
@@ -428,7 +428,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
     e.preventDefault();
     const telLimpio = limpiarTelefono(formTelefonoCliente);
     if (!telLimpio || telLimpio === 'N/A' || !formNombreCliente) {
-      alert('El telÃ©fono vÃ¡lido y el nombre son obligatorios.');
+      alert('El teléfono válido y el nombre son obligatorios.');
       return;
     }
 
@@ -469,7 +469,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
   };
 
   const eliminarCliente = async (telefono) => {
-    if (window.confirm('Â¿EstÃ¡s seguro de eliminar este cliente?')) {
+    if (window.confirm('¿Estás seguro de eliminar este cliente?')) {
       try {
         const { error } = await supabase.from('clientes').delete().eq('telefono', telefono);
         if (error) throw error;
@@ -481,7 +481,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
     }
   };
 
-  // --- FUNCIONES MÃ“DULO PRODUCTOS ---
+  // --- FUNCIONES MÓDULO PRODUCTOS ---
   const abrirModalCrear = () => {
     setModoEdicion(false);
     setProductoActualId(null);
@@ -574,7 +574,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
 
       setModalMenuAbierto(false);
       await cargarDatosBD();
-      alert(modoEdicion ? 'Â¡Producto modificado con Ã©xito!' : 'Â¡Producto creado con Ã©xito!');
+      alert(modoEdicion ? '¡Producto modificado con éxito!' : '¡Producto creado con éxito!');
     } catch (error) {
       console.error("Error al guardar el producto:", error.message);
       alert("Hubo un error al guardar el producto: " + error.message);
@@ -594,7 +594,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
   };
 
   const eliminarProducto = async (id) => {
-    if (window.confirm('Â¿EstÃ¡s seguro de eliminar este producto?')) {
+    if (window.confirm('¿Estás seguro de eliminar este producto?')) {
       try {
         const { error } = await supabase.from('productos').delete().eq('id', id);
         if (error) throw error;
@@ -605,13 +605,13 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
     }
   };
 
-  // --- FUNCIONES MÃ“DULO Ã“RDENES ---
+  // --- FUNCIONES MÓDULO ÓRDENES ---
   const cambiarEstadoOrden = async (id, nuevoEstado) => {
     const ordenActual = ordenes.find(o => o.id === id);
     if (ordenActual) {
       const estadoDb = (ordenActual.estado || '').toLowerCase().trim();
       if (['listo', 'entregado', 'cancelado'].includes(estadoDb)) {
-        alert('Esta orden ya se encuentra en estado Listo/Entregado y estÃ¡ bloqueada contra modificaciones.');
+        alert('Esta orden ya se encuentra en estado Listo/Entregado y está bloqueada contra modificaciones.');
         return;
       }
     }
@@ -716,7 +716,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
 
       if (error) throw error;
 
-      alert('Â¡Orden modificada con Ã©xito!');
+      alert('¡Orden modificada con éxito!');
       setModalOrdenAbierto(false);
       cargarDatosBD();
     } catch (error) {
@@ -775,7 +775,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
           <div className="space-y-3 max-w-full overflow-hidden">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2.5">
               <div>
-                <h2 className="text-base md:text-lg font-black text-white">GestiÃ³n de usuarios y acceso</h2>
+                <h2 className="text-base md:text-lg font-black text-white">Gestión de usuarios y acceso</h2>
                 <p className="text-[11px] text-neutral-400 mt-0.5">Controla roles, permisos de ingreso y estado activo/bloqueado de tu equipo.</p>
               </div>
 
@@ -827,7 +827,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                       <tr className="border-b border-neutral-800 text-neutral-400 text-[11px]">
                         <th className="pb-2.5">Usuario</th>
                         <th className="pb-2.5">Correo de Acceso</th>
-                        <th className="pb-2.5">TelÃ©fono</th>
+                        <th className="pb-2.5">Teléfono</th>
                         <th className="pb-2.5">Rol</th>
                         <th className="pb-2.5">Acceso</th>
                         <th className="pb-2.5 text-right">Acciones</th>
@@ -896,13 +896,13 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                       <input 
                         type="text" required value={formNombreUsuario} 
                         onChange={(e) => setFormNombreUsuario(e.target.value)} 
-                        placeholder="Ej. Ana GÃ³mez"
+                        placeholder="Ej. Ana Gómez"
                         className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-1.5 text-xs text-white font-bold focus:outline-none focus:border-amber-500" 
                       />
                     </div>
 
                     <div>
-                      <label className="text-[11px] font-semibold text-neutral-300 block mb-1">Correo ElectrÃ³nico *</label>
+                      <label className="text-[11px] font-semibold text-neutral-300 block mb-1">Correo Electrónico *</label>
                       <input 
                         type="email" required value={formCorreoUsuario} 
                         onChange={(e) => setFormCorreoUsuario(e.target.value)} 
@@ -927,7 +927,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                       </div>
 
                       <div>
-                        <label className="text-[11px] font-semibold text-neutral-300 block mb-1">TelÃ©fono</label>
+                        <label className="text-[11px] font-semibold text-neutral-300 block mb-1">Teléfono</label>
                         <input 
                           type="text" value={formTelefonoUsuario} 
                           onChange={(e) => setFormTelefonoUsuario(e.target.value)} 
@@ -944,7 +944,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                       <input 
                         type="password" value={formClaveUsuario} 
                         onChange={(e) => setFormClaveUsuario(e.target.value)} 
-                        placeholder={modoEdicionUsuario ? 'Dejar vacÃ­o para mantener actual' : 'Asignar clave inicial'}
+                        placeholder={modoEdicionUsuario ? 'Dejar vacío para mantener actual' : 'Asignar clave inicial'}
                         className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-1.5 text-xs text-white font-bold focus:outline-none focus:border-amber-500" 
                       />
                     </div>
@@ -989,17 +989,17 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
           <div className="space-y-3 max-w-full overflow-hidden">
             <div>
               <h2 className="text-base md:text-lg font-black text-white">Control de pagos</h2>
-              <p className="text-[11px] text-neutral-400 mt-0.5">Pedidos pendientes o sin pago confirmado para auditorÃ­a y cobro.</p>
+              <p className="text-[11px] text-neutral-400 mt-0.5">Pedidos pendientes o sin pago confirmado para auditoría y cobro.</p>
             </div>
             {cargandoOrdenes ? (
-              <div className="py-20 text-center text-neutral-500 text-xs">Cargando Ã³rdenes pendientes de pago...</div>
+              <div className="py-20 text-center text-neutral-500 text-xs">Cargando órdenes pendientes de pago...</div>
             ) : ordenesPendientesPago.length === 0 ? (
               <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-8 text-center space-y-2 shadow-lg">
                 <div className="w-9 h-9 bg-neutral-950 rounded-xl border border-neutral-800 flex items-center justify-center mx-auto text-neutral-500">
                   <CheckCircle className="w-4 h-4 text-emerald-400" />
                 </div>
-                <h3 className="text-xs font-bold text-white">Â¡Excelente! No hay pedidos pendientes de pago</h3>
-                <p className="text-[11px] text-neutral-400">Todas las Ã³rdenes registradas cuentan con su pago confirmado o aprobado.</p>
+                <h3 className="text-xs font-bold text-white">¡Excelente! No hay pedidos pendientes de pago</h3>
+                <p className="text-[11px] text-neutral-400">Todas las órdenes registradas cuentan con su pago confirmado o aprobado.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
@@ -1032,7 +1032,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                         <span className="text-[9px] text-amber-400 font-bold uppercase tracking-wider block">Desglose de Cobro:</span>
                         <div className="text-[11px] text-neutral-300 space-y-0.5">
                           <div className="flex justify-between">
-                            <span>Subtotal Ã­tems:</span>
+                            <span>Subtotal ítems:</span>
                             <span className="font-semibold">$ {subtotalBase.toLocaleString()}</span>
                           </div>
                           {esDomicilio && (
@@ -1047,7 +1047,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                       <div className="space-y-2 pt-1 border-t border-neutral-800">
                         <div className="grid grid-cols-2 gap-2">
                           <div>
-                            <label className="text-[10px] font-bold text-neutral-400 block mb-0.5">MÃ©todo de Pago:</label>
+                            <label className="text-[10px] font-bold text-neutral-400 block mb-0.5">Método de Pago:</label>
                             <select 
                               value={o.metodo_pago || 'Efectivo'}
                               onChange={(e) => registrarPagoOrden(o.id, o.estado_pago || 'Por Pagar', e.target.value)}
@@ -1122,8 +1122,8 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
           <div className="space-y-3 max-w-full overflow-hidden">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2.5">
               <div>
-                <h2 className="text-base md:text-lg font-black text-white">GestiÃ³n de clientes</h2>
-                <p className="text-[11px] text-neutral-400 mt-0.5">SincronizaciÃ³n en tiempo real con datos de Ã³rdenes e identificaciÃ³n por telÃ©fono.</p>
+                <h2 className="text-base md:text-lg font-black text-white">Gestión de clientes</h2>
+                <p className="text-[11px] text-neutral-400 mt-0.5">Sincronización en tiempo real con datos de órdenes e identificación por teléfono.</p>
               </div>
 
               <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -1131,7 +1131,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                   <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input 
                     type="text" 
-                    placeholder="Buscar por nombre o telÃ©fono..."
+                    placeholder="Buscar por nombre o teléfono..."
                     value={busquedaCliente}
                     onChange={(e) => { setBusquedaCliente(e.target.value); setPaginaActualClientes(1); }}
                     className="w-full bg-neutral-900 border border-neutral-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white font-bold focus:outline-none focus:border-amber-500"
@@ -1151,7 +1151,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                   <Users className="w-4 h-4 text-amber-500" />
                 </div>
                 <h3 className="text-xs font-bold text-white">No se encontraron clientes</h3>
-                <p className="text-[11px] text-neutral-400 max-w-xs mx-auto">Los clientes se insertan automÃ¡ticamente a medida que ingresan nuevas Ã³rdenes.</p>
+                <p className="text-[11px] text-neutral-400 max-w-xs mx-auto">Los clientes se insertan automáticamente a medida que ingresan nuevas órdenes.</p>
               </div>
             ) : (
               <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-3 space-y-3 shadow-lg">
@@ -1159,9 +1159,9 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                   <table className="w-full text-left text-xs min-w-[700px]">
                     <thead>
                       <tr className="border-b border-neutral-800 text-neutral-400 text-[11px]">
-                        <th className="pb-2.5">TelÃ©fono (NÃºmero Ãšnico)</th>
+                        <th className="pb-2.5">Teléfono (Número Único)</th>
                         <th className="pb-2.5">Primer Nombre / Registrado</th>
-                        <th className="pb-2.5">DirecciÃ³n / UbicaciÃ³n</th>
+                        <th className="pb-2.5">Dirección / Ubicación</th>
                         <th className="pb-2.5">Observaciones</th>
                         <th className="pb-2.5 text-right">Acciones</th>
                       </tr>
@@ -1215,9 +1215,9 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                       onChange={(e) => { setRegistrosPorPaginaClientes(Number(e.target.value)); setPaginaActualClientes(1); }}
                       className="bg-neutral-950 border border-neutral-800 rounded-lg px-2 py-0.5 text-white font-bold focus:outline-none focus:border-amber-500 cursor-pointer ml-1 text-[11px]"
                     >
-                      <option value="5">5 por pÃ¡g</option>
-                      <option value="10">10 por pÃ¡g</option>
-                      <option value="20">20 por pÃ¡g</option>
+                      <option value="5">5 por pág</option>
+                      <option value="10">10 por pág</option>
+                      <option value="20">20 por pág</option>
                     </select>
                   </div>
 
@@ -1249,7 +1249,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                 <div className="bg-neutral-900 border border-neutral-800 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl relative">
                   <div className="flex justify-between items-center pb-2 border-b border-neutral-800">
                     <h3 className="text-xs font-black text-white">
-                      {modoEdicionCliente ? 'Modificar InformaciÃ³n de Cliente' : 'Crear Nuevo Cliente'}
+                      {modoEdicionCliente ? 'Modificar Información de Cliente' : 'Crear Nuevo Cliente'}
                     </h3>
                     <button onClick={() => setModalClienteAbierto(false)} className="p-1 bg-neutral-950 rounded-lg text-neutral-400 hover:text-white cursor-pointer">
                       <X className="w-4 h-4" />
@@ -1258,7 +1258,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
 
                   <form onSubmit={guardarCliente} className="space-y-2.5">
                     <div>
-                      <label className="text-[11px] font-semibold text-neutral-300 block mb-1">TelÃ©fono / WhatsApp (NÃºmero Ãšnico) *</label>
+                      <label className="text-[11px] font-semibold text-neutral-300 block mb-1">Teléfono / WhatsApp (Número Único) *</label>
                       <input 
                         type="text" required placeholder="3001234567" 
                         value={formTelefonoCliente} 
@@ -1279,7 +1279,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                     </div>
 
                     <div>
-                      <label className="text-[11px] font-semibold text-neutral-300 block mb-1">DirecciÃ³n</label>
+                      <label className="text-[11px] font-semibold text-neutral-300 block mb-1">Dirección</label>
                       <input 
                         type="text" placeholder="Ej. Calle 50 # 45-20 o N/A" 
                         value={formDireccionCliente} 
@@ -1320,7 +1320,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                         <span>Historial:</span> 
                         <span className="text-amber-400">{capitalizarTexto(clienteSeleccionadoHistorial.nombre) || 'Cliente'}</span>
                       </h3>
-                      <p className="text-[10px] text-neutral-400">TelÃ©fono: {limpiarTelefono(clienteSeleccionadoHistorial.telefono)}</p>
+                      <p className="text-[10px] text-neutral-400">Teléfono: {limpiarTelefono(clienteSeleccionadoHistorial.telefono)}</p>
                     </div>
                     <button onClick={() => setModalHistorialAbierto(false)} className="p-1 bg-neutral-950 rounded-lg text-neutral-400 hover:text-white cursor-pointer">
                       <X className="w-4 h-4" />
@@ -1329,11 +1329,11 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                     <div className="bg-neutral-950 border border-neutral-800 rounded-xl p-3">
-                      <span className="text-[10px] text-neutral-400 font-bold uppercase">Total Ã“rdenes</span>
+                      <span className="text-[10px] text-neutral-400 font-bold uppercase">Total Órdenes</span>
                       <p className="text-base font-black text-amber-400 mt-1">{ordenesClienteHistorial.length} pedidos</p>
                     </div>
                     <div className="bg-neutral-950 border border-neutral-800 rounded-xl p-3">
-                      <span className="text-[10px] text-neutral-400 font-bold uppercase">InversiÃ³n Acumulada</span>
+                      <span className="text-[10px] text-neutral-400 font-bold uppercase">Inversión Acumulada</span>
                       <p className="text-base font-black text-white mt-1">$ {totalGastadoHistorial.toLocaleString()}</p>
                     </div>
                     <div className="bg-neutral-950 border border-neutral-800 rounded-xl p-3">
@@ -1435,7 +1435,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
           <div className="space-y-3 max-w-full overflow-hidden">
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2.5">
               <div>
-                <h2 className="text-base md:text-lg font-black text-white">GestiÃ³n de Ã³rdenes</h2>
+                <h2 className="text-base md:text-lg font-black text-white">Gestión de órdenes</h2>
               </div>
 
               <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
@@ -1443,7 +1443,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                   <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input 
                     type="text" 
-                    placeholder="Buscar cliente o NÂ°..."
+                    placeholder="Buscar cliente o N°..."
                     value={busquedaOrden}
                     onChange={(e) => { setBusquedaOrden(e.target.value); setPaginaActualOrdenes(1); }}
                     className="w-full bg-neutral-900 border border-neutral-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white font-bold focus:outline-none focus:border-amber-500"
@@ -1487,13 +1487,13 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
             </div>
 
             {cargandoOrdenes ? (
-              <div className="py-20 text-center text-neutral-500 text-xs">Cargando Ã³rdenes...</div>
+              <div className="py-20 text-center text-neutral-500 text-xs">Cargando órdenes...</div>
             ) : ordenesFiltradas.length === 0 ? (
               <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-8 text-center space-y-2 shadow-lg">
                 <div className="w-9 h-9 bg-neutral-950 rounded-xl border border-neutral-800 flex items-center justify-center mx-auto text-neutral-500">
                   <ClipboardList className="w-4 h-4 text-amber-500" />
                 </div>
-                <h3 className="text-xs font-bold text-white">No se encontraron Ã³rdenes</h3>
+                <h3 className="text-xs font-bold text-white">No se encontraron órdenes</h3>
               </div>
             ) : (
               <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-3 space-y-2.5 shadow-lg">
@@ -1501,10 +1501,10 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                   <table className="w-full text-left text-xs min-w-[750px]">
                     <thead>
                       <tr className="border-b border-neutral-800 text-neutral-400 text-[11px]">
-                        <th className="pb-2.5">ID / NÂ° Orden</th>
+                        <th className="pb-2.5">ID / N° Orden</th>
                         <th className="pb-2.5">Tipo Servicio</th>
                         <th className="pb-2.5">Cliente</th>
-                        <th className="pb-2.5">Ãtems / Detalle</th>
+                        <th className="pb-2.5">Ítems / Detalle</th>
                         <th className="pb-2.5">Total</th>
                         <th className="pb-2.5">Estado Pago</th>
                         <th className="pb-2.5">Estado Pedido</th>
@@ -1581,11 +1581,11 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
 
                 <div className="flex flex-col sm:flex-row justify-between items-center pt-2 border-t border-neutral-800 gap-2 text-xs">
                   <div className="flex items-center gap-2 text-neutral-400">
-                    <span>Mostrando del <strong>{totalRegistros > 0 ? indicePrimerRegistro + 1 : 0}</strong> al <strong>{Math.min(indiceUltimoRegistro, totalRegistros)}</strong> de <strong>{totalRegistros}</strong> Ã³rdenes</span>
+                    <span>Mostrando del <strong>{totalRegistros > 0 ? indicePrimerRegistro + 1 : 0}</strong> al <strong>{Math.min(indiceUltimoRegistro, totalRegistros)}</strong> de <strong>{totalRegistros}</strong> órdenes</span>
                     <select value={registrosPorPagina} onChange={(e) => { setRegistrosPorPagina(Number(e.target.value)); setPaginaActualOrdenes(1); }} className="bg-neutral-950 border border-neutral-800 rounded-lg px-2 py-0.5 text-white font-bold focus:outline-none text-[11px]">
-                      <option value="5">5 por pÃ¡g</option>
-                      <option value="10">10 por pÃ¡g</option>
-                      <option value="20">20 por pÃ¡g</option>
+                      <option value="5">5 por pág</option>
+                      <option value="10">10 por pág</option>
+                      <option value="20">20 por pág</option>
                     </select>
                   </div>
                   <div className="flex items-center gap-1.5">
@@ -1618,10 +1618,10 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="space-y-2 bg-neutral-950 p-3 rounded-xl border border-neutral-800">
-                      <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider">ArtÃ­culos en el Pedido</h4>
+                      <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider">Artículos en el Pedido</h4>
                       <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
                         {itemsEditables.length === 0 ? (
-                          <p className="text-xs text-neutral-500 italic py-2">No hay artÃ­culos en la orden.</p>
+                          <p className="text-xs text-neutral-500 italic py-2">No hay artículos en la orden.</p>
                         ) : (
                           itemsEditables.map((item, idx) => (
                             <div key={idx} className="bg-neutral-900 border border-neutral-800 rounded-lg p-2 space-y-1.5">
@@ -1637,7 +1637,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                                 </div>
                                 <input 
                                   type="text" 
-                                  placeholder="Nota/ObservaciÃ³n Ã­tem..." 
+                                  placeholder="Nota/Observación ítem..." 
                                   value={item.observacion || ''}
                                   onChange={(e) => actualizarNotaItemModal(idx, e.target.value)}
                                   className="flex-1 bg-neutral-950 border border-neutral-800 rounded px-2 py-1 text-[10px] text-white focus:outline-none focus:border-amber-500"
@@ -1655,12 +1655,12 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
 
                     <div className="space-y-3 flex flex-col justify-between">
                       <div className="space-y-2">
-                        <h4 className="text-xs font-bold text-white uppercase tracking-wider">AÃ±adir mÃ¡s artÃ­culos</h4>
+                        <h4 className="text-xs font-bold text-white uppercase tracking-wider">Añadir más artículos</h4>
                         <div className="relative">
                           <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                           <input 
                             type="text" 
-                            placeholder="Buscador sencillo de menÃº..." 
+                            placeholder="Buscador sencillo de menú..." 
                             value={busquedaProductoModal}
                             onChange={(e) => setBusquedaProductoModal(e.target.value)}
                             className="w-full bg-neutral-950 border border-neutral-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500 font-bold"
@@ -1674,7 +1674,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                                 <span className="text-[10px] text-amber-400 font-semibold">$ {Number(p.precio).toLocaleString()}</span>
                               </div>
                               <button onClick={() => agregarItemAOrdenModal(p)} className="px-2 py-1 bg-amber-500 hover:bg-amber-400 text-neutral-950 font-black rounded-lg text-[10px] cursor-pointer shadow">
-                                + AÃ±adir
+                                + Añadir
                               </button>
                             </div>
                           ))}
@@ -1720,7 +1720,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2.5">
               <div>
                 <h2 className="text-base md:text-lg font-black text-white">Productos</h2>
-                <p className="text-[11px] text-neutral-400 mt-0.5">GestiÃ³n completa del catÃ¡logo, precios, categorÃ­as y disponibilidad.</p>
+                <p className="text-[11px] text-neutral-400 mt-0.5">Gestión completa del catálogo, precios, categorías y disponibilidad.</p>
               </div>
 
               <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -1749,7 +1749,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                   <Utensils className="w-4 h-4 text-amber-500" />
                 </div>
                 <h3 className="text-xs font-bold text-white">No se encontraron productos</h3>
-                <p className="text-[11px] text-neutral-400">Intenta con otro tÃ©rmino de bÃºsqueda.</p>
+                <p className="text-[11px] text-neutral-400">Intenta con otro término de búsqueda.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5">
@@ -1769,7 +1769,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                         <p className="text-sm font-black text-white mt-1">$ {Number(p.precio).toLocaleString()}</p>
                       </div>
                     </div>
-                    <p className="text-[11px] text-neutral-400 line-clamp-2">{capitalizarTexto(p.descripcion) || 'Sin descripciÃ³n'}</p>
+                    <p className="text-[11px] text-neutral-400 line-clamp-2">{capitalizarTexto(p.descripcion) || 'Sin descripción'}</p>
                     <div className="flex justify-between items-center pt-2 border-t border-neutral-800">
                       <button onClick={() => cambiarDisponibilidad(p.id, p.disponible)} className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${p.disponible ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-red-500/10 text-red-400 border border-red-500/30'}`}>
                         {p.disponible ? 'Disponible' : 'Agotado'}
@@ -1804,7 +1804,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                     </div>
                     <div className="grid grid-cols-2 gap-2.5">
                       <div>
-                        <label className="text-[11px] font-semibold text-neutral-300 block mb-1">CategorÃ­a *</label>
+                        <label className="text-[11px] font-semibold text-neutral-300 block mb-1">Categoría *</label>
                         <select value={formCategoriaId} onChange={(e) => setFormCategoriaId(e.target.value)} className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-1.5 text-xs text-white font-bold focus:outline-none focus:border-amber-500 cursor-pointer">
                           {categorias.map(cat => (
                             <option key={cat.id} value={cat.id}>{cat.nombre}</option>
@@ -1817,7 +1817,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
                       </div>
                     </div>
                     <div>
-                      <label className="text-[11px] font-semibold text-neutral-300 block mb-1">DescripciÃ³n</label>
+                      <label className="text-[11px] font-semibold text-neutral-300 block mb-1">Descripción</label>
                       <textarea rows="2" value={formDescripcion} onChange={(e) => setFormDescripcion(e.target.value)} className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500 resize-none" />
                     </div>
                     <div>
@@ -1859,7 +1859,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
       }
 
       default:
-        return <div className="text-white text-xs">Selecciona un mÃ³dulo vÃ¡lido.</div>;
+        return <div className="text-white text-xs">Selecciona un módulo válido.</div>;
     }
   };
 
@@ -1868,7 +1868,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
       {cargandoInicial && (
         <div className="fixed inset-0 bg-neutral-950 z-50 flex flex-col items-center justify-center space-y-3">
           <div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-xs font-bold text-neutral-300">Cargando VÃ©rtizze Dashboard...</p>
+          <p className="text-xs font-bold text-neutral-300">Cargando Vértizze Dashboard...</p>
         </div>
       )}
 
@@ -1896,7 +1896,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
               V
             </div>
             <div>
-              <h1 className="text-xs font-black tracking-wider text-white">VÃ‰RTIZZE ADMIN</h1>
+              <h1 className="text-xs font-black tracking-wider text-white">VÉRTIZZE ADMIN</h1>
               <p className="text-[10px] text-neutral-400">Rol activo: {rolUsuario}</p>
             </div>
           </div>
@@ -1916,7 +1916,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
       <div className="flex-1 flex overflow-hidden">
         <aside className={`hidden md:flex flex-col bg-neutral-900 border-r border-neutral-800 transition-all duration-300 ${menuColapsado ? 'w-16' : 'w-56'} p-3 space-y-4`}>
           <div className="flex justify-between items-center pb-2 border-b border-neutral-800">
-            {!menuColapsado && <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400">NavegaciÃ³n</span>}
+            {!menuColapsado && <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400">Navegación</span>}
             <button onClick={() => setMenuColapsado(!menuColapsado)} className="p-1 bg-neutral-950 rounded-lg text-neutral-400 hover:text-white cursor-pointer mx-auto">
               <Menu className="w-4 h-4" />
             </button>
@@ -1953,7 +1953,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
               className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
             >
               <LogOut className="w-4 h-4 shrink-0" />
-              {!menuColapsado && <span>Cerrar SesiÃ³n</span>}
+              {!menuColapsado && <span>Cerrar Sesión</span>}
             </button>
           </div>
         </aside>
@@ -1962,7 +1962,7 @@ export default function DashboardGeneral({ rolInicial = 'administrador', onCerra
           <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 md:hidden flex">
             <div className="w-64 bg-neutral-900 border-r border-neutral-800 p-4 flex flex-col space-y-4 shadow-2xl">
               <div className="flex justify-between items-center pb-3 border-b border-neutral-800">
-                <span className="text-xs font-black uppercase text-white">MenÃº Principal</span>
+                <span className="text-xs font-black uppercase text-white">Menú Principal</span>
                 <button onClick={() => setMenuMovilAbierto(false)} className="p-1 bg-neutral-950 rounded-lg text-neutral-400 hover:text-white cursor-pointer">
                   <X className="w-4 h-4" />
                 </button>

@@ -42,8 +42,8 @@ export default function App() {
     };
 
     // Verificación de sesión al cargar desde localStorage
-    const sesionGuardada = JSON.parse(localStorage.getItem('vertizze_sesion') || 'null');
-    const rolGuardado = localStorage.getItem('rol_vertizze') || sesionGuardada?.rol;
+    const sesionGuardada = JSON.parse(sessionStorage.getItem('vertizze_sesion') || 'null');
+    const rolGuardado = sessionStorage.getItem('rol_vertizze') || sesionGuardada?.rol;
     
     if (sesionGuardada || rolGuardado) {
       setSesionActiva(true);
@@ -57,12 +57,12 @@ export default function App() {
   }, []);
 
   const cerrarSesionGeneral = () => {
-    localStorage.removeItem('vertizze_sesion');
-    localStorage.removeItem('sesion_admin');
-    localStorage.removeItem('rol_vertizze');
+    sessionStorage.removeItem('vertizze_sesion');
+    sessionStorage.removeItem('sesion_admin');
+    sessionStorage.removeItem('rol_vertizze');
     setSesionActiva(false);
     setRolSesion(null);
-    window.location.href = '/'; 
+    window.location.href = '/login'; 
   };
 
   const manejarAgregarAlCarrito = (producto) => {
@@ -117,7 +117,7 @@ export default function App() {
         <Login 
           alIniciarSesion={(rolAsignado = 'administrador') => {
             const rolNormalizado = rolAsignado.toLowerCase().trim();
-            localStorage.setItem('rol_vertizze', rolNormalizado);
+            sessionStorage.setItem('rol_vertizze', rolNormalizado);
             setRolSesion(rolNormalizado);
             setSesionActiva(true);
           }} 

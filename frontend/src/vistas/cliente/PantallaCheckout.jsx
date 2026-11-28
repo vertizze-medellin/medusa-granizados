@@ -98,6 +98,11 @@ export default function PantallaCheckout({
     setTelefonoCliente(e.target.value.replace(/[^0-9]/g, ''));
   };
 
+  const normalizarTelefono = (telefono) => {
+    const limpio = String(telefono || '').replace(/\D/g, '');
+    return limpio.startsWith('57') && limpio.length > 10 ? limpio.slice(2) : limpio;
+  };
+
   // Filtrado de zonas por búsqueda
   const zonasFiltradas = zonas.filter(z => 
     z.barrio_zona.toLowerCase().includes(busquedaZona.toLowerCase())
@@ -119,10 +124,11 @@ export default function PantallaCheckout({
       ? `Zona: ${zonaSeleccionada.barrio_zona} | Dir: ${detalleMesaOBarrio}`
       : (detalleMesaOBarrio || textoServicio);
 
+    const telefonoNormalizado = normalizarTelefono(telefonoCliente);
     const datosOrden = {
       numero_orden: Math.floor(1000 + Math.random() * 9000),
       cliente_nombre: nombreCliente,
-      telefono: telefonoCliente,
+      telefono: telefonoNormalizado,
       ubicacion_detalle: ubicacionFinal,
       tipo_servicio: textoServicio,
       observaciones: '',
@@ -143,6 +149,21 @@ export default function PantallaCheckout({
         .single();
 
       if (error) throw error;
+
+      // Guarda también el cliente para que aparezca de inmediato en el panel administrativo.
+      // Si la tabla clientes tiene RLS restrictivo, el pedido continúa creado y el panel hará el respaldo.
+      if (telefonoNormalizado && nombreCliente.trim()) {
+        const cliente = {
+          telefono: telefonoNormalizado,
+          nombre: nombreCliente.trim(),
+          direccion: ubicacionFinal,
+          observaciones: 'Registrado desde el portal de pedidos'
+        };
+        const existente = await supabase.from('clientes').select('telefono').eq('telefono', cliente.telefono).maybeSingle();
+        if (existente.error) console.warn('No se pudo consultar el cliente:', existente.error.message);
+        else if (existente.data) await supabase.from('clientes').update(cliente).eq('telefono', cliente.telefono);
+        else await supabase.from('clientes').insert([cliente]);
+      }
        
       setProcesando(false);
       alConfirmarPedido(data);
